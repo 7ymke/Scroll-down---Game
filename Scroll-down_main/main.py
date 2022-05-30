@@ -1,29 +1,38 @@
 import pygame
 import button
-from constants import SCREEN_HEIGHT, SCREEN_WIDTH
+import level_code
+from constants import SCREEN_HEIGHT, SCREEN_WIDTH, MAX_FPS
 
 #create display window
-
-
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+level = level_code.level
+level_creator = level_code.Level_creator(level)
+
+
 pygame.display.set_caption('Button Demo')
 
 #load button images
-settings_img = pygame.image.load('source/textures/gui/settings_button.png').convert_alpha()
-exit_img = pygame.image.load('source/textures/gui/exit_button.png').convert_alpha()
-GUI_Image = pygame.image.load('source/textures/gui/GUI.png').convert_alpha()
+settings_img = pygame.image.load('Scroll-down---Game/Scroll-down_main/source/textures/gui/settings_button.png').convert_alpha()
+exit_img = pygame.image.load('Scroll-down---Game/Scroll-down_main/source/textures/gui/exit_button.png').convert_alpha()
+GUI_Image = pygame.image.load('Scroll-down---Game/Scroll-down_main/source/textures/gui/GUI.png').convert_alpha()
+#icon managment
 
+icon_image = pygame.image.load('Scroll-down---Game/Scroll-down_main/source/textures/gui/icon.jpg').convert_alpha()
+pygame.display.set_icon(icon_image)
 #create button instances
 settings_button = button.Button(20, 20, settings_img, 0.1)
 exit_button = button.Button(220, 27, exit_img, 0.07)
 
-
 gui_shown = 0
 #game loop
 run = True
+num = 1
+clock = pygame.time.Clock()
 while run:
-
-    screen.fill((26, 173, 151))
+    num += 1
+    clock.tick(MAX_FPS)
+    screen.fill((20 * num % 5, 173, 151))
+    level_creator.draw_level(screen)
     if gui_shown == 1:
         screen.blit(GUI_Image, (20, 15))
         if exit_button.draw(screen):
