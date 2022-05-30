@@ -13,7 +13,7 @@ class Projectile:
         if launched[0]:
             return launched
         elif pygame.mouse.get_pressed()[0] or pygame.key.get_pressed()[pygame.K_SPACE]:
-            return (True, math.floor(pygame.mouse.get_pos()[1]))
+            return (True, math.floor(pygame.mouse.get_pos()[1] - 25.5))
         else:
             return (False, 0)
     
@@ -21,4 +21,4 @@ class Projectile:
         surface.blit(img,(posx, posy))
     
     def get_pos(posx, posy):
-        return ((posx - 705)/ 51, (posy - 285)/ 51)
+        return (math.floor((posx - 705)/ 51), math.floor((posy - 285 + 25.5)/ 51 + 2.5))

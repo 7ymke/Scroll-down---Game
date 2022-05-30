@@ -1,3 +1,4 @@
+from turtle import position
 import pygame
 import button
 import level_code
@@ -21,19 +22,21 @@ GUI_Image = pygame.image.load('Scroll-down_main/source/textures/gui/GUI.png').co
 
 icon_image = pygame.image.load('Scroll-down_main/source/textures/gui/icon.jpg').convert_alpha()
 pygame.display.set_icon(icon_image)
+direction = 180
 #Projectile images
-laser = pygame.image.load('Scroll-down_main/source/textures/Projectiles/Laser.png')
-laser = pygame.transform.rotate(laser, 180)
+laser = pygame.image.load('Scroll-down_main/source/textures/Projectiles/Laser.png').convert_alpha()
+laser = pygame.transform.rotate(laser, direction)
 
-
+mirrors_used = []
 #create button instances
 settings_button = button.Button(20, 20, settings_img, 0.1)
 exit_button = button.Button(220, 27, exit_img, 0.07)
 portaltype = 1
 gui_shown = 0
-prox = 0
-proy = 0
+prox = 510 + starting_level_creator_x
+proy = 540
 test = 0
+
 #game loop
 launched = (False, 0)
 run = True
@@ -52,16 +55,45 @@ while run:
             proy = launched[1]
             test = 1
         else:
-            prox -= 1
-    if abs(projectile.Projectile.get_pos(prox, proy)[1]) < 26:
-        if abs(projectile.Projectile.get_pos(prox, proy)[0]) < 11:
-            print(projectile.Projectile.get_pos(prox, proy))
-            if level_code.level[abs(math.floor(projectile.Projectile.get_pos(prox, proy)[0]))][abs(math.floor(projectile.Projectile.get_pos(prox, proy)[1]))][0] == 0 and launched[0]:
-                print(projectile.Projectile.get_pos(prox, proy)[0], projectile.Projectile.get_pos(prox, proy)[1], prox, proy, pygame.mouse.get_pressed()[0])
+            prox += math.cos(math.radians((direction + 1080) % 360))
+            if direction == 180:
+                proy += 0
+            elif direction == 90:
+                proy += 1
+            elif direction == 270: 
+                proy -= 1
+
+    
+    if abs(projectile.Projectile.get_pos(prox, proy)[1]) < 15:
+        if abs(projectile.Projectile.get_pos(prox, proy)[0]) < 10:
+            touching_block = level_code.level[abs(math.floor(projectile.Projectile.get_pos(prox, proy)[1]))][abs(math.floor(projectile.Projectile.get_pos(prox, proy)[0]))]
+            if not touching_block == '' and touching_block[0] == 0:
                 launched = (False, 0)
-                prox = 0
-                proy = 0
+                prox = 510 + starting_level_creator_x
+                proy = 540
                 test = 0
+                direction = 180
+            elif projectile.Projectile.get_pos(prox, proy)[0] < 0 or projectile.Projectile.get_pos(prox, proy)[1] < 0 or projectile.Projectile.get_pos(prox, proy)[1] > 15:
+                launched = (False, 0)
+                prox = 510 + starting_level_creator_x
+                proy = 540
+                test = 0
+                direction = 180
+            elif not touching_block == '' and touching_block[0] == 1 and (projectile.Projectile.get_pos(prox, proy)) not in mirrors_used:
+                mirrors_used.append(projectile.Projectile.get_pos(prox, proy))
+                prox += math.cos(math.radians((direction + 1080) % 360)) * 51
+                if direction == 180:
+                    proy += 0
+                elif direction == 90:
+                    proy += 51
+                elif direction == 270: 
+                    proy -= 51
+                direction += direction - 90 + touching_block[1]
+                laser = pygame.transform.rotate(laser, direction)
+                
+
+                print(mirrors_used)
+                
     if num % 5 == 0:
         portaltype += 1
     if portaltype == 18:
