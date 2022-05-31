@@ -21,4 +21,4 @@ class Projectile:
         surface.blit(img,(posx, posy))
     
     def get_pos(posx, posy):
-        return (math.floor((posx - 705)/ 51), math.floor((posy - 285 + 25.5)/ 51 + 2.5))
+        return (math.floor((posx - 705 + 25.5)/ 51), math.floor((posy - 285 + 25.5)/ 51 + 2.5))
