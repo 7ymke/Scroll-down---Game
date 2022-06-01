@@ -4,6 +4,7 @@ import button
 import level_code
 import projectile
 import math
+import os
 from constants import SCREEN_HEIGHT, SCREEN_WIDTH, MAX_FPS, starting_level_creator_x
 
 #create display window
@@ -15,16 +16,16 @@ level_creator = level_code.Level_creator(level)
 pygame.display.set_caption('Button Demo')
 
 #load button images
-settings_img = pygame.image.load('Scroll-down_main/source/textures/gui/settings_button.png').convert_alpha()
-exit_img = pygame.image.load('Scroll-down_main/source/textures/gui/exit_button.png').convert_alpha()
-GUI_Image = pygame.image.load('Scroll-down_main/source/textures/gui/GUI.png').convert_alpha()
+settings_img = pygame.image.load((os.path.join("Scroll-down_main", "source", 'textures', 'gui', "settings_button.png"))).convert_alpha()
+exit_img = pygame.image.load(os.path.join("Scroll-down_main", "source", 'textures', 'gui', "exit_button.png")).convert_alpha()
+GUI_Image = pygame.image.load(os.path.join("Scroll-down_main", "source", 'textures', 'gui', "GUI.png")).convert_alpha()
 #icon managment
 
-icon_image = pygame.image.load('Scroll-down_main/source/textures/gui/icon.jpg').convert_alpha()
+icon_image = pygame.image.load(os.path.join("Scroll-down_main", "source", 'textures', 'gui', "icon.jpg")).convert_alpha()
 pygame.display.set_icon(icon_image)
 direction = 0
 #Projectile images
-laser_img = pygame.image.load('Scroll-down_main/source/textures/Projectiles/Laser.png').convert_alpha()
+laser_img = pygame.image.load(os.path.join("Scroll-down_main", "source", 'textures', 'Projectiles', "Laser.png")).convert_alpha()
 laser = pygame.transform.rotate(laser_img, direction)
 portaltype = 1
 gui_shown = 0
@@ -135,11 +136,7 @@ while run:
                         display_x = 25.5
                         direction = 180
                 laser = pygame.transform.rotate(laser_img, direction)
-
-                laser = pygame.transform.rotate(laser_img, direction)
-        
-            
-
+     
             
 
     level_creator.draw_level(screen, str(portaltype))            
@@ -149,8 +146,7 @@ while run:
     if portaltype == 18:
         portaltype = 1
     clock.tick(MAX_FPS)
-    
-    
+
     if gui_shown == 1:
         screen.blit(GUI_Image, (20, 15))
         if exit_button.draw(screen):
